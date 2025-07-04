@@ -1,7 +1,11 @@
 {
   "name": "@shuizhongyueming/monads",
   "version": "0.1.1",
-  "exports": "./src/mod.ts",
+  "exports": {
+    ".": "./src/mod.ts",
+    "./option": "./src/option/option.ts",
+    "./result": "./src/result/result.ts"
+  },
   "tasks": {
     "test": "deno test -A"
   }
