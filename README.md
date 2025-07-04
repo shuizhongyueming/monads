@@ -43,7 +43,7 @@ pnpm i jsr:@shuizhongyueming/monads
 Option represents an optional value: every Option is either Some and contains a value, or None, and does not.
 
 > [!NOTE]
-> Full documentation here: [Option](https://jsr.io/@shuizhongyueming/monads/0.1.1/src/option/README.md)
+> Full documentation here: [Option](https://jsr.io/@shuizhongyueming/monads/0.2.0/src/option/README.md)
 
 ```ts
 import { Option, Some, None } from 'jsr:@shuizhongyueming/monads';
@@ -73,7 +73,7 @@ console.log(message); // "Result: 0.6666666666666666"
 Result represents a value that is either a success (Ok) or a failure (Err).
 
 > [!NOTE]
-> Full documentation here: [Result](https://jsr.io/@shuizhongyueming/monads/0.1.1/src/result/README.md)
+> Full documentation here: [Result](https://jsr.io/@shuizhongyueming/monads/0.2.0/src/result/README.md)
 
 ```ts
 import { Result, Ok, Err } from 'jsr:@shuizhongyueming/monads';
