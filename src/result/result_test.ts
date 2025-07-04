@@ -79,7 +79,7 @@ describe("Result", () => {
 
     it("inspectErr should not execute function and return Ok", () => {
       let inspected = false;
-      const result = okResult.inspectErr((err) => {
+      const result = okResult.inspectErr(() => {
         inspected = true;
       });
       expect(inspected).toBe(false);

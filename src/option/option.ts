@@ -8,7 +8,10 @@ type NonUndefined = {} | null;
 /**
  * Enum-like object to represent the type of an Option (Some or None).
  */
-export const OptionType = {
+export const OptionType: {
+  Some: symbol;
+  None: symbol;
+} = {
   Some: Symbol(":some"),
   None: Symbol(":none"),
 };

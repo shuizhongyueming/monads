@@ -16,7 +16,10 @@ type NonUndefined = {} | null;
 /**
  * Enum-like object to represent the type of a Result (Ok or Err).
  */
-export const ResultType = {
+export const ResultType: {
+  Ok: symbol;
+  Err: symbol;
+} = {
   Ok: Symbol(":ok"),
   Err: Symbol(":err"),
 };
