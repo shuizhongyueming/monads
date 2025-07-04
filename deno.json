@@ -1,0 +1,8 @@
+{
+  "name": "@shuizhongyueming/monads",
+  "version": "0.7.0",
+  "exports": "./src/mod.ts",
+  "tasks": {
+    "test": "deno test -A"
+  }
+}

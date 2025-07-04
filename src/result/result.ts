@@ -1,4 +1,4 @@
-import { None, NoneOption, Option, Some, SomeOption } from '../option/option';
+import { None, NoneOption, Option, Some, SomeOption } from '../option/option.ts';
 
 /**
  * Type representing any value except 'undefined'.
