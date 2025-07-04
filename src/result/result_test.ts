@@ -67,6 +67,24 @@ describe("Result", () => {
       const orElseResult = okResult.orElse((err) => Err(`Error: ${err}`));
       expect(orElseResult.unwrap()).toBe(value);
     });
+
+    it("inspect should execute function and return original Ok", () => {
+      let inspected = "";
+      const result = okResult.inspect((val) => {
+        inspected = val;
+      });
+      expect(inspected).toBe(value);
+      expect(result.unwrap()).toBe(value);
+    });
+
+    it("inspectErr should not execute function and return Ok", () => {
+      let inspected = false;
+      const result = okResult.inspectErr((err) => {
+        inspected = true;
+      });
+      expect(inspected).toBe(false);
+      expect(result.unwrap()).toBe(value);
+    });
   });
 
   describe("Err", () => {
@@ -133,6 +151,24 @@ describe("Result", () => {
         Ok(`Recovered from ${err}`)
       );
       expect(orElseResult.unwrap()).toBe(`Recovered from ${error}`);
+    });
+
+    it("inspect should not execute function and return Err", () => {
+      let inspected = false;
+      const result = errResult.inspect(() => {
+        inspected = true;
+      });
+      expect(inspected).toBe(false);
+      expect(result.unwrapErr()).toBe(error);
+    });
+
+    it("inspectErr should execute function and return original Err", () => {
+      let inspected = "";
+      const result = errResult.inspectErr((err) => {
+        inspected = err;
+      });
+      expect(inspected).toBe(error);
+      expect(result.unwrapErr()).toBe(error);
     });
   });
 

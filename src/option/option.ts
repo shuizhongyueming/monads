@@ -2,14 +2,15 @@
  * Type representing any value except 'undefined'.
  * This is useful when working with strict null checks, ensuring that a value can be null but not undefined.
  */
-type NonUndefined = {} | null; // eslint-disable-line @typescript-eslint/ban-types
+// deno-lint-ignore ban-types
+type NonUndefined = {} | null;
 
 /**
  * Enum-like object to represent the type of an Option (Some or None).
  */
 export const OptionType = {
-  Some: Symbol(':some'),
-  None: Symbol(':none'),
+  Some: Symbol(":some"),
+  None: Symbol(":none"),
 };
 
 /**
@@ -87,6 +88,22 @@ export interface Option<T extends NonUndefined> {
    * ```
    */
   match<U extends NonUndefined | void>(fn: Match<T, U>): U;
+
+  /**
+   * Calls the provided closure with the contained value (if Some), returns the original Option.
+   * Primarily used for debugging and side effects.
+   *
+   * @param fn A function that takes a value of type T and performs side effects.
+   * @returns The original Option unchanged.
+   *
+   * #### Examples
+   *
+   * ```ts
+   * Some("hello").inspect(s => console.log(s)); // logs "hello", returns Some("hello")
+   * None.inspect(s => console.log(s)); // does nothing, returns None
+   * ```
+   */
+  inspect(fn: (val: T) => void): Option<T>;
 
   /**
    * Applies a function to the contained value (if any), or returns a default if None.
@@ -192,6 +209,8 @@ export interface Option<T extends NonUndefined> {
 export interface SomeOption<T extends NonUndefined> extends Option<T> {
   unwrap(): T;
 
+  inspect(fn: (val: T) => void): SomeOption<T>;
+
   map<U extends NonUndefined>(fn: (val: T) => U): SomeOption<U>;
 
   andThen<U extends NonUndefined>(fn: (val: T) => SomeOption<U>): SomeOption<U>;
@@ -209,6 +228,8 @@ export interface SomeOption<T extends NonUndefined> extends Option<T> {
  */
 export interface NoneOption<T extends NonUndefined> extends Option<T> {
   unwrap(): never;
+
+  inspect(_fn: (val: T) => void): NoneOption<T>;
 
   map<U extends NonUndefined>(_fn: (val: T) => U): NoneOption<U>;
 
@@ -241,6 +262,11 @@ class SomeImpl<T extends NonUndefined> implements SomeOption<T> {
 
   match<B>(fn: Match<T, B>): B {
     return fn.some(this.val);
+  }
+
+  inspect(fn: (val: T) => void): SomeOption<T> {
+    fn(this.val);
+    return this;
   }
 
   map<U extends NonUndefined>(fn: (val: T) => U): SomeOption<U> {
@@ -289,11 +315,15 @@ class NoneImpl<T extends NonUndefined> implements NoneOption<T> {
   }
 
   match<U>({ none }: Match<T, U>): U {
-    if (typeof none === 'function') {
+    if (typeof none === "function") {
       return (none as () => U)();
     }
 
     return none;
+  }
+
+  inspect(_fn: (val: T) => void): NoneOption<T> {
+    return this;
   }
 
   map<U extends NonUndefined>(_fn: (val: T) => U): NoneOption<U> {
@@ -319,7 +349,7 @@ class NoneImpl<T extends NonUndefined> implements NoneOption<T> {
   }
 
   unwrap(): never {
-    throw new ReferenceError('Trying to unwrap None.');
+    throw new ReferenceError("Trying to unwrap None.");
   }
 }
 
@@ -352,7 +382,8 @@ export function Some<T extends NonUndefined>(val: T): SomeOption<T> {
  * console.log(option.isNone()); // Outputs: true
  * ```
  */
-export const None: NoneOption<any> = new NoneImpl(); // eslint-disable-line @typescript-eslint/no-explicit-any
+// deno-lint-ignore no-explicit-any
+export const None: NoneOption<any> = new NoneImpl();
 
 /**
  * Type guard to check if an Option is a Some value.
@@ -371,7 +402,9 @@ export const None: NoneOption<any> = new NoneImpl(); // eslint-disable-line @typ
  * }
  * ```
  */
-export function isSome<T extends NonUndefined>(val: Option<T>): val is SomeOption<T> {
+export function isSome<T extends NonUndefined>(
+  val: Option<T>,
+): val is SomeOption<T> {
   return val.isSome();
 }
 
@@ -392,6 +425,8 @@ export function isSome<T extends NonUndefined>(val: Option<T>): val is SomeOptio
  * }
  * ```
  */
-export function isNone<T extends NonUndefined>(val: Option<T>): val is NoneOption<T> {
+export function isNone<T extends NonUndefined>(
+  val: Option<T>,
+): val is NoneOption<T> {
   return val.isNone();
 }

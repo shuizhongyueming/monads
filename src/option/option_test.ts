@@ -62,6 +62,15 @@ describe("Option", () => {
     it("unwrap should return value", () => {
       expect(someOption.unwrap()).toBe(value);
     });
+
+    it("inspect should execute function and return original Some", () => {
+      let inspected = "";
+      const result = someOption.inspect((val) => {
+        inspected = val;
+      });
+      expect(inspected).toBe(value);
+      expect(result.unwrap()).toBe(value);
+    });
   });
 
   describe("None", () => {
@@ -112,6 +121,15 @@ describe("Option", () => {
     it("unwrap should throw", () => {
       expect(() => None.unwrap()).toThrow();
     });
+
+    it("inspect should not execute function and return None", () => {
+      let inspected = false;
+      const result = None.inspect(() => {
+        inspected = true;
+      });
+      expect(inspected).toBe(false);
+      expect(result).toStrictEqual(None);
+    });
   });
 
   describe("isSome", () => {
@@ -146,7 +164,8 @@ describe("Option", () => {
 
     it("isSome", () => {
       if (some.isSome()) {
-        type unwrapRes = Equals<"foo", ReturnType<typeof some.unwrap>>;
+        type someReturn = ReturnType<typeof some.unwrap>;
+        type unwrapRes = Equals<"foo", someReturn>;
         type _unwrapRes = Expect<unwrapRes>;
 
         const mappedSome = some.map((val) => val.length);
