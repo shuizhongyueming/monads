@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://thames-technology.github.io/monads">
-    <img src="https://raw.githubusercontent.com/thames-technology/monads/main/.github/assets/monads-cover.png" alt="Monads Logo" />
+  <a href="https://github.com/shuizhongyueming/monads">
+    <img src="https://raw.githubusercontent.com/shuizhongyueming/monads/main/.github/assets/monads-cover.png" alt="Monads Logo" />
   </a>
 </p>
 
@@ -10,7 +10,10 @@
 
 ---
 
-<h2 align="center">Option, Result, and Either types for JavaScript</h2>
+> [!NOTE]
+> Most of the code in this repository is forked from [slavovojacek/monads](https://github.com/slavovojacek/monads).
+
+<h2 align="center">Option and Result types for JavaScript</h2>
 
 <p align="center">
   🦀 Inspired by <a href="https://doc.rust-lang.org/stable/std/option/" target="_blank">Rust</a>
@@ -25,7 +28,12 @@
 ## Install
 
 ```sh
-npm install @thames/monads
+# deno
+deno add @shuizhongyueming/monads
+# npm
+npx jsr add @shuizhongyueming/monads
+# pnpm
+pnpm i jsr:@shuizhongyueming/monads
 ```
 
 ## Getting started
@@ -35,10 +43,10 @@ npm install @thames/monads
 Option represents an optional value: every Option is either Some and contains a value, or None, and does not.
 
 > [!NOTE]
-> Full documentation here: [Option](https://thames-technology.github.io/monads/interfaces/Option.html)
+> Full documentation here: [Option](https://jsr.io/@shuizhongyueming/monads/0.1.1/src/option/README.md)
 
 ```ts
-import { Option, Some, None } from '@thames/monads';
+import { Option, Some, None } from 'jsr:@shuizhongyueming/monads';
 
 const divide = (numerator: number, denominator: number): Option<number> => {
   if (denominator === 0) {
@@ -65,10 +73,10 @@ console.log(message); // "Result: 0.6666666666666666"
 Result represents a value that is either a success (Ok) or a failure (Err).
 
 > [!NOTE]
-> Full documentation here: [Result](https://thames-technology.github.io/monads/interfaces/Result.html)
+> Full documentation here: [Result](https://jsr.io/@shuizhongyueming/monads/0.1.1/src/result/README.md)
 
 ```ts
-import { Result, Ok, Err } from '@thames/monads';
+import { Result, Ok, Err } from 'jsr:@shuizhongyueming/monads';
 
 const getIndex = (values: string[], value: string): Result<number, string> => {
   const index = values.indexOf(value);
@@ -85,32 +93,4 @@ const values = ['a', 'b', 'c'];
 
 getIndex(values, 'b'); // Ok(1)
 getIndex(values, 'z'); // Err("Value not found")
-```
-
-### The `Either<L, R>` type
-
-Either represents a value that is either Left or Right. It is a powerful way to handle operations that can result in two distinctly different types of outcomes.
-
-> [!NOTE]
-> Full documentation here: [Either](https://thames-technology.github.io/monads/interfaces/Either.html)
-
-```ts
-import { Either, Left, Right } from '@thames/monads';
-
-const divide = (numerator: number, denominator: number): Either<string, number> => {
-  if (denominator === 0) {
-    return Left('Cannot divide by 0');
-  } else {
-    return Right(numerator / denominator);
-  }
-};
-
-const result = divide(2.0, 3.0);
-
-const message = result.match({
-  left: (err) => `Error: ${err}`,
-  right: (res) => `Result: ${res}`,
-});
-
-console.log(message); // "Result: 0.6666666666666666"
 ```
