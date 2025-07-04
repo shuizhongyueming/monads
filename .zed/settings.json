@@ -1,0 +1,41 @@
+{
+  "format_on_save": "on",
+  "lsp": {
+    "deno": {
+      "settings": {
+        "deno": {
+          "enable": true,
+          "lint": true
+        }
+      }
+    }
+  },
+  "language_servers": [
+    "!biome",
+    "!vtsls",
+    "!typescript-language-server",
+    "!eslint",
+    "..."
+  ],
+  "languages": {
+    "TypeScript": {
+      "language_servers": [
+        "deno",
+        "!biome",
+        "!typescript-language-server",
+        "!vtsls",
+        "!eslint"
+      ],
+      "formatter": "language_server"
+    },
+    "TSX": {
+      "language_servers": [
+        "deno",
+        "!biome",
+        "!typescript-language-server",
+        "!vtsls",
+        "!eslint"
+      ]
+    }
+  }
+}
