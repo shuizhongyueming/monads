@@ -31,5 +31,11 @@
         "jsr:@std/internal@^1.0.7"
       ]
     }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@std/expect@*",
+      "jsr:@std/testing@*"
+    ]
   }
 }

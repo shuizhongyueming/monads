@@ -1,5 +1,5 @@
-import { describe, it } from "jsr:@std/testing/bdd";
-import { expect } from "jsr:@std/expect";
+import { describe, it } from "@std/testing/bdd";
+import { expect } from "@std/expect";
 import { Err, isErr, isOk, Ok, type Result, ResultType } from "./result.ts";
 import type { Equals, Expect } from "../test_utils.ts/test_utils.ts";
 

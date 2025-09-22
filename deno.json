@@ -6,6 +6,10 @@
     "./option": "./src/option/option.ts",
     "./result": "./src/result/result.ts"
   },
+  "imports": {
+    "@std/testing/bdd": "jsr:@std/testing/bdd",
+    "@std/expect": "jsr:@std/expect"
+  },
   "tasks": {
     "test": "deno test -A"
   }
