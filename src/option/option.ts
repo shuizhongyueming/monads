@@ -373,7 +373,7 @@ class NoneImpl<T extends NonUndefined> implements NoneOption<T> {
   }
 
   unwrap(): never {
-    throw new ReferenceError("Trying to unwrap None.");
+    throw new ReferenceError(`called "Option.unwrap()" on a "None" value`);
   }
 
   expect(message: string): never {
