@@ -100,6 +100,21 @@ export interface Result<T extends NonUndefined, E extends NonUndefined> {
   err(): Option<E>;
 
   /**
+   * Unwraps a Result, yielding the contained success value if Ok, otherwise throws an error with the provided message.
+   *
+   * @returns The contained success value.
+   * @throws Error if the Result is Err.
+   *
+   * #### Examples
+   *
+   * ```ts
+   * console.log(Ok("value").expect("Expected a value")); // "value"
+   * console.log(Err("error").expect("Expected a value")); // throws Error with message "Expected a value"
+   * ```
+   */
+  expect(message: string): T;
+
+  /**
    * Unwraps a Result, yielding the contained success value if Ok, otherwise throws an error.
    *
    * @returns The contained success value.
@@ -275,6 +290,7 @@ interface OkResult<T extends NonUndefined, E extends NonUndefined>
   extends Result<T, E> {
   ok(): SomeOption<T>;
   err(): NoneOption<E>;
+  expect(message: string): T;
   unwrap: () => T;
   unwrapErr: () => never;
   inspect(fn: (val: T) => void): OkResult<T, E>;
@@ -290,6 +306,7 @@ interface ErrResult<T extends NonUndefined, E extends NonUndefined>
   extends Result<T, E> {
   ok(): NoneOption<T>;
   err(): SomeOption<E>;
+  expect(message: string): never;
   unwrap: () => never;
   unwrapErr: () => E;
   inspect(_fn: (val: T) => void): ErrResult<T, E>;
@@ -329,6 +346,10 @@ class OkImpl<T extends NonUndefined, E extends NonUndefined>
     return matchObject.ok(this.val);
   }
 
+  expect(_message: string): T {
+    return this.val;
+  }
+
   inspect(fn: (val: T) => void): OkResult<T, E> {
     fn(this.val);
     return this;
@@ -359,7 +380,9 @@ class OkImpl<T extends NonUndefined, E extends NonUndefined>
   }
 
   unwrapErr(): never {
-    throw new ReferenceError("Cannot unwrap Err value of Result.Ok");
+    throw new ReferenceError(
+      `called "Result.unwrapErr()" on an "Ok" value: ${this.val}`,
+    );
   }
 
   unwrapOr(_optb: T): T {
@@ -398,6 +421,10 @@ class ErrImpl<T extends NonUndefined, E extends NonUndefined>
     return matchObject.err(this.val);
   }
 
+  expect(message: string): never {
+    throw new Error(`${message}: ${this.val}`);
+  }
+
   inspect(_fn: (val: T) => void): ErrResult<T, E> {
     return this;
   }
@@ -424,7 +451,9 @@ class ErrImpl<T extends NonUndefined, E extends NonUndefined>
   }
 
   unwrap(): never {
-    throw new ReferenceError("Cannot unwrap Ok value of Result.Err");
+    throw new ReferenceError(
+      `called "Result.unwrap()" on an "Err" value: ${this.val}`,
+    );
   }
 
   unwrapErr(): E {
