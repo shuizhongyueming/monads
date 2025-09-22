@@ -40,21 +40,27 @@ pnpm i jsr:@shuizhongyueming/monads
 
 ### The `Option<T>` type
 
-Option represents an optional value: every Option is either Some and contains a value, or None, and does not.
+Type `Option<T>` represents an optional value: every `Option` is either `Some` and contains a value, or `None`, and does not.
 
-> [!NOTE]
-> Full documentation here: [Option](https://jsr.io/@shuizhongyueming/monads/0.2.0/src/option/README.md)
+You could consider using `Option` for:
 
-```ts
+- Nullable pointers (`undefined` in JavaScript)
+- Return value for otherwise reporting simple errors, where None is returned on error
+- Default values and/or properties
+- Nested optional object properties
+
+`Option`s are commonly paired with pattern matching to query the presence of a value and take action, always accounting for the `None` case.
+
+```typescript
 import { Option, Some, None } from 'jsr:@shuizhongyueming/monads';
 
-const divide = (numerator: number, denominator: number): Option<number> => {
+function divide(numerator: number, denominator: number): Option<number> {
   if (denominator === 0) {
     return None;
   } else {
     return Some(numerator / denominator);
   }
-};
+}
 
 // The return value of the function is an option
 const result = divide(2.0, 3.0);
@@ -68,17 +74,21 @@ const message = result.match({
 console.log(message); // "Result: 0.6666666666666666"
 ```
 
+Original implementation: <https://doc.rust-lang.org/std/option/enum.Option.html>
+
+
 ### The `Result<T, E>` type
 
-Result represents a value that is either a success (Ok) or a failure (Err).
+`Result<T, E>` is the type used for returning and propagating errors. The variants are `Ok(T)`, representing success and containing a value, and `Err(E)`, representing error and containing an error value.
 
-> [!NOTE]
-> Full documentation here: [Result](https://jsr.io/@shuizhongyueming/monads/0.2.0/src/result/README.md)
+You could consider using `Result` for:
 
-```ts
+- Return value whenever errors are expected and recoverable
+
+```typescript
 import { Result, Ok, Err } from 'jsr:@shuizhongyueming/monads';
 
-const getIndex = (values: string[], value: string): Result<number, string> => {
+function getIndex(values: string[], value: string): Result<number, string> {
   const index = values.indexOf(value);
 
   switch (index) {
@@ -87,10 +97,10 @@ const getIndex = (values: string[], value: string): Result<number, string> => {
     default:
       return Ok(index);
   }
-};
+}
 
-const values = ['a', 'b', 'c'];
-
-getIndex(values, 'b'); // Ok(1)
-getIndex(values, 'z'); // Err("Value not found")
+console.log(getIndex(['a', 'b', 'c'], 'b')); // Ok(1)
+console.log(getIndex(['a', 'b', 'c'], 'z')); // Err("Value not found")
 ```
+
+Original implementation: <https://doc.rust-lang.org/std/result/enum.Result.html>
