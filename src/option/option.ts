@@ -204,6 +204,21 @@ export interface Option<T extends NonUndefined> {
    * ```
    */
   unwrap(): T | never;
+
+  /**
+   * Unwraps an Option, yielding the contained value if Some, otherwise throws an error with the provided message.
+   *
+   * @returns The contained value.
+   * @throws Error if the Option is None.
+   *
+   * #### Examples
+   *
+   * ```ts
+   * console.log(Some("value").expect("Expected a value")); // "value"
+   * console.log(None.expect("Expected a value")); // throws Error with message "Expected a value"
+   * ```
+   */
+  expect(message: string): T;
 }
 
 /**
@@ -231,6 +246,8 @@ export interface SomeOption<T extends NonUndefined> extends Option<T> {
  */
 export interface NoneOption<T extends NonUndefined> extends Option<T> {
   unwrap(): never;
+
+  expect(message: string): never;
 
   inspect(_fn: (val: T) => void): NoneOption<T>;
 
@@ -299,6 +316,10 @@ class SomeImpl<T extends NonUndefined> implements SomeOption<T> {
   unwrap(): T {
     return this.val;
   }
+
+  expect(_message: string): T {
+    return this.val;
+  }
 }
 
 /**
@@ -353,6 +374,10 @@ class NoneImpl<T extends NonUndefined> implements NoneOption<T> {
 
   unwrap(): never {
     throw new ReferenceError("Trying to unwrap None.");
+  }
+
+  expect(message: string): never {
+    throw new Error(message);
   }
 }
 

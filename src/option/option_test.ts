@@ -71,6 +71,10 @@ describe("Option", () => {
       expect(inspected).toBe(value);
       expect(result.unwrap()).toBe(value);
     });
+
+    it("expect should return the value", () => {
+      expect(someOption.expect("Expected a value")).toBe(value);
+    });
   });
 
   describe("None", () => {
@@ -129,6 +133,10 @@ describe("Option", () => {
       });
       expect(inspected).toBe(false);
       expect(result).toStrictEqual(None);
+    });
+
+    it("expect should throw with message", () => {
+      expect(() => None.expect("Expected a value")).toThrow("Expected a value");
     });
   });
 
