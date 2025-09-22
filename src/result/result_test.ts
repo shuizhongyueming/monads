@@ -85,6 +85,10 @@ describe("Result", () => {
       expect(inspected).toBe(false);
       expect(result.unwrap()).toBe(value);
     });
+
+    it("expect should return the value", () => {
+      expect(okResult.expect("Expected a value")).toBe(value);
+    });
   });
 
   describe("Err", () => {
@@ -169,6 +173,12 @@ describe("Result", () => {
       });
       expect(inspected).toBe(error);
       expect(result.unwrapErr()).toBe(error);
+    });
+
+    it("expect should throw with message", () => {
+      expect(() => errResult.expect("Expected a value")).toThrow(
+        "Expected a value: error",
+      );
     });
   });
 
